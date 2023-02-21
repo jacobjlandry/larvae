@@ -31,7 +31,7 @@ class DeployDocker extends Command
         $storagePath = storage_path("app/sites/{$this->argument('site')}");
 
         // load config
-        $siteConfig = "{$storagePath}/deploy.conf";
+        $siteConfig = "{$storagePath}/deploy/deploy.conf";
         $config = json_decode(file_get_contents($siteConfig));
         if(!$config) {
             throw new Exception("No valid configuration file found");
@@ -46,7 +46,7 @@ class DeployDocker extends Command
         $commands = [];
 
         // set up the copy command
-        $env = "{$storagePath}/{$site->env}";
+        $env = "{$storagePath}/environment/{$site->env}";
         $logs['env'] = "Copying {$env}...";
         $copyCommand = "sshpass -p {$site->password} scp {$env} {$site->user}@{$site->ip}:{$site->remote_location}/.env";
         $commands['env'] = $copyCommand;
